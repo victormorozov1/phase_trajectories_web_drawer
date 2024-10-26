@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Визуализатор автономных систем</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #inputContainer { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div id="inputContainer">
+    <h2>Введите матрицу 2x2</h2>
+    <label>a11: <input type="number" id="a11" value="0"></label>
+    <label>a12: <input type="number" id="a12" value="1"></label><br>
+    <label>a21: <input type="number" id="a21" value="-1"></label>
+    <label>a22: <input type="number" id="a22" value="0"></label><br>
+    <button onclick="drawPhasePortrait()">Обновить фазовый 
+портрет</button>
+</div>
+
+<div id="plot"></div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script 
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.3.0/math.min.js"></script>
+<script src="viz.js"></script>
+</body>
+</html>
