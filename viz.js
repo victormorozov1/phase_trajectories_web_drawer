@@ -30,20 +30,19 @@ function drawPhasePortrait() {
         };
     };
 
-    const trajectory = (x0, y0, steps, dt) => {
-        const points = [];
-        let x = x0;
-        let y = y0;
-
-        for (let i = 0; i < steps; i++) {
-            points.push([x, y]);
-            const { dx, dy } = system(x, y);
-            x += dx * dt;
-            y += dy * dt;
-        }
-        console.log(points);
-        return points;
-    };
+//    const trajectory = (x0, y0, steps, dt) => {
+//        const points = [];
+//        let x = x0;
+//        let y = y0;
+//
+//        for (let i = 0; i < steps; i++) {
+//            points.push([x, y]);
+//            const { dx, dy } = system(x, y);
+//            x += dx * dt;
+//            y += dy * dt;
+//        }
+//        return points;
+//    };
 
     const trajectories = [
 //        trajectory(1, 0, 100, 0.1),
@@ -53,7 +52,7 @@ function drawPhasePortrait() {
 //        trajectory(30, 30, 1000, 1),
 //        trajectory(40, 20, 1000, 1),
 //        trajectory(-10, 20, 1000, 1),
-        trajectory(10, 10, 7000, 0.001),
+        trajectory(10, 10, 700000, 0.001, [-50, 50], [-50, 50], 0.1),
     ];
 
     const plotData = trajectories.map(traj => ({
@@ -82,19 +81,35 @@ function drawPhasePortrait() {
     });
 }
 
-function trajectory(x0, y0, max_steps, dt) {
+
+function trajectory(x0, y0, maxSteps, dt, xRange, yRange, epsilon) {
     const points = [];
     let x = x0;
     let y = y0;
+    let was_far_away = false;
 
-    for (let i = 0; i < max_steps; i++) {
+    for (let i = 0; i < maxSteps; i++) {
         points.push([x, y]);
+
         const { dx, dy } = system(x, y);
         x += dx * dt;
         y += dy * dt;
+
+        if (x < xRange[0] || x > xRange[1] || y < yRange[0] || y > yRange[1]) {
+            break;
+        }
+        //console.log(x, y, x0, y0, Math.hypot(x - x0, y - y0))
+        if (Math.hypot(x - x0, y - y0) > epsilon) {
+            was_far_away = true;
+        }
+        else if (was_far_away && Math.hypot(x - x0, y - y0) < epsilon) {
+            break;
+        }
     }
+    console.log(points);
     return points;
 }
+
 
 function animateTrajectory(xStart, yStart) {
     const traj = trajectory(xStart, yStart, 100, 0.1);
