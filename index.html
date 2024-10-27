@@ -5,20 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Визуализатор автономных систем</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        #inputContainer { margin-bottom: 20px; }
+<!--        body { font-family: Arial, sans-serif; }-->
+<!--        #inputContainer { margin-bottom: 20px; }-->
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 200px;
+            margin-bottom: 10px;
+        }
+        .slider {
+            margin: 10px 0;
+        }
+
     </style>
 </head>
 <body>
 
 <div id="inputContainer">
-    <h2>Введите матрицу 2x2</h2>
-    <label>a11: <input type="number" id="a11" value="0"></label>
-    <label>a12: <input type="number" id="a12" value="1"></label><br>
-    <label>a21: <input type="number" id="a21" value="-1"></label>
-    <label>a22: <input type="number" id="a22" value="0"></label><br>
-    <button onclick="drawPhasePortrait()">Обновить фазовый 
-портрет</button>
+    <label>a11: <input type="number" id="l_a11" value="0"></label>
+    <label>a12: <input type="number" id="l_a12" value="1"></label><br>
+    <label>a21: <input type="number" id="l_a21" value="-1"></label>
+    <label>a22: <input type="number" id="l_a22" value="0"></label><br>
+    <button onclick="drawPhasePortrait()">Обновить фазовый портрет</button>
+
+    <div class="slider-container">
+        <label>a11: <span id="a11-value"></span></label>
+        <input type="range" id="a11" class="slider" min="-5" max="5" step="0.1" value="0">
+
+        <label>a12: <span id="a12-value"></span></label>
+        <input type="range" id="a12" class="slider" min="-5" max="5" step="0.1" value="0">
+
+        <label>a21: <span id="a21-value"></span></label>
+        <input type="range" id="a21" class="slider" min="-5" max="5" step="0.1" value="0">
+
+        <label>a22: <span id="a22-value"></span></label>
+        <input type="range" id="a22" class="slider" min="-5" max="5" step="0.1" value="0">
+    </div>
+
 </div>
 
 <div id="plot"></div>

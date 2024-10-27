@@ -5,11 +5,25 @@
 //    plot.on('plotly_click', function(data) {
 //        var xCoord = data.points[0].x;
 //        var yCoord = data.points[0].y;
-//        console.log(xCoord, yCoord);
-//        console.log(data)
 //        animateTrajectory(xCoord, yCoord);
 //    });
 //});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const sliders = ['a11', 'a12', 'a21', 'a22'];
+    sliders.forEach(id => {
+        const slider = document.getElementById(id);
+        const valueSpan = document.getElementById(`${id}-value`);
+        valueSpan.textContent = slider.value;
+        slider.addEventListener('input', function() {
+            valueSpan.textContent = this.value;
+            drawPhasePortrait();
+        });
+    });
+
+    drawPhasePortrait();
+});
+
 
 function drawPhasePortrait() {
     const a11 = parseFloat(document.getElementById('a11').value);
@@ -20,7 +34,6 @@ function drawPhasePortrait() {
     const matrix = [[a11, a12], [a21, a22]];
     // Расчёт собственных значений и собственных векторов
     const eigen = math.eigs(matrix);
-    console.log(eigen);
     const eigenVectors = eigen.vectors;
 
     const system = (x, y) => {
@@ -44,15 +57,14 @@ function drawPhasePortrait() {
 //        return points;
 //    };
 
+    const SZ = 50;
+
     const trajectories = [
-        trajectory(-10, 20, 700000, 0.001, [-50, 50], [-50, 50], 0.2),
-        trajectory(1, 10, 700000, 0.001, [-50, 50], [-50, 50], 0.2),
-        trajectory(10, 5, 700000, 0.001, [-50, 50], [-50, 50], 0.2),
-        trajectory(1, 6, 700000, 0.001, [-50, 50], [-50, 50], 0.2),
-        trajectory(-6, -19, 700000, 0.001, [-50, 50], [-50, 50], 0.2),
-        trajectory(-18,-20, 700000, 0.001, [-50, 50], [-50, 50], 0.2),
-        trajectory(1, 1, 700000, 0.001, [-50, 50], [-50, 50], 0.2),
-        trajectory(10, 10, 700000, 0.001, [-50, 50], [-50, 50], 0.2),
+        trajectory(40, 40, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-20, 20, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(10, -10, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-1, -1, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(0, 0, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
     ];
 
     const plotData = trajectories.map(traj => ({
@@ -75,8 +87,8 @@ function drawPhasePortrait() {
     });
 
     Plotly.newPlot('plot', plotData, {
-        xaxis: { title: 'x', range: [-50, 50] },
-        yaxis: { title: 'y', range: [-50, 50    ] },
+        xaxis: { title: 'x', range: [-SZ, SZ]},
+        yaxis: { title: 'y', range: [-SZ, SZ]},
         title: 'Фазовый портрет автономной системы',
     });
 }
@@ -98,7 +110,6 @@ function trajectory(x0, y0, maxSteps, dt, xRange, yRange, epsilon) {
         if (x < xRange[0] || x > xRange[1] || y < yRange[0] || y > yRange[1]) {
             break;
         }
-        //console.log(x, y, x0, y0, Math.hypot(x - x0, y - y0))
         if (Math.hypot(x - x0, y - y0) > epsilon) {
             was_far_away = true;
         }
@@ -106,7 +117,6 @@ function trajectory(x0, y0, maxSteps, dt, xRange, yRange, epsilon) {
             break;
         }
     }
-    console.log(points);
     return points;
 }
 
@@ -166,5 +176,4 @@ Plotly.d3.select(".plotly").on('click', function(d, i) {
          ]
       }, [3]); // Add new point to the empty trace
    }
-   console.log(x, y);
 });
