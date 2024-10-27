@@ -1,29 +1,15 @@
-//document.addEventListener("DOMContentLoaded", function() {
-
-    // Добавляем обработчик событий
-//    var plot = document.getElementById('plot');
-//    plot.on('plotly_click', function(data) {
-//        var xCoord = data.points[0].x;
-//        var yCoord = data.points[0].y;
-//        animateTrajectory(xCoord, yCoord);
-//    });
-//});
-
 document.addEventListener("DOMContentLoaded", function() {
-    const sliders = ['a11', 'a12', 'a21', 'a22'];
-    sliders.forEach(id => {
-        const slider = document.getElementById(id);
-        const valueSpan = document.getElementById(`${id}-value`);
-        valueSpan.textContent = slider.value;
-        slider.addEventListener('input', function() {
-            valueSpan.textContent = this.value;
+    const inputs = ['a11', 'a12', 'a21', 'a22'];
+
+    inputs.forEach(id => {
+        const input = document.getElementById(id);
+        input.addEventListener('input', function() {
             drawPhasePortrait();
         });
     });
 
     drawPhasePortrait();
 });
-
 
 function drawPhasePortrait() {
     const a11 = parseFloat(document.getElementById('a11').value);
@@ -32,7 +18,6 @@ function drawPhasePortrait() {
     const a22 = parseFloat(document.getElementById('a22').value);
 
     const matrix = [[a11, a12], [a21, a22]];
-    // Расчёт собственных значений и собственных векторов
     const eigen = math.eigs(matrix);
     const eigenVectors = eigen.vectors;
 
@@ -43,20 +28,6 @@ function drawPhasePortrait() {
         };
     };
 
-//    const trajectory = (x0, y0, steps, dt) => {
-//        const points = [];
-//        let x = x0;
-//        let y = y0;
-//
-//        for (let i = 0; i < steps; i++) {
-//            points.push([x, y]);
-//            const { dx, dy } = system(x, y);
-//            x += dx * dt;
-//            y += dy * dt;
-//        }
-//        return points;
-//    };
-
     const SZ = 50;
 
     const trajectories = [
@@ -65,6 +36,28 @@ function drawPhasePortrait() {
         trajectory(10, -10, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
         trajectory(-1, -1, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
         trajectory(0, 0, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(10, 7, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-15, 5, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-20, 30, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(2, 7, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(3, 37, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(0, -SZ, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-SZ, 0, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(SZ, 0, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(0, SZ, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(SZ, SZ, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-SZ, -SZ, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(SZ, -SZ, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-SZ, SZ, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(0, 0, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(0, 1, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(1, 0, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-1, 0, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(0, -1, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(1, 1, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-1, -1, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(-1, 1, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
+        trajectory(1, -1, 70000, 0.001, [-SZ, SZ], [-SZ, SZ], 0.3),
     ];
 
     const plotData = trajectories.map(traj => ({
@@ -157,7 +150,6 @@ Number.prototype.between = function(min, max) {
    return this >= min && this <= max;
 };
 
-// Click event to add a new point
 Plotly.d3.select(".plotly").on('click', function(d, i) {
    var myPlot = document.getElementById('plot');
    var e = Plotly.d3.event;
@@ -165,7 +157,6 @@ Plotly.d3.select(".plotly").on('click', function(d, i) {
    var x = ((e.layerX - bg.attributes['x'].value + 4) / (bg.attributes['width'].value)) * (myPlot.layout.xaxis.range[1] - myPlot.layout.xaxis.range[0]) + myPlot.layout.xaxis.range[0];
    var y = ((e.layerY - bg.attributes['y'].value + 4) / (bg.attributes['height'].value)) * (myPlot.layout.yaxis.range[0] - myPlot.layout.yaxis.range[1]) + myPlot.layout.yaxis.range[1];
 
-   // Check if the clicked point is within the plot range
    if (x.between(myPlot.layout.xaxis.range[0], myPlot.layout.xaxis.range[1]) && y.between(myPlot.layout.yaxis.range[0], myPlot.layout.yaxis.range[1])) {
       Plotly.extendTraces(myPlot, {
          x: [
@@ -174,6 +165,6 @@ Plotly.d3.select(".plotly").on('click', function(d, i) {
          y: [
             [y]
          ]
-      }, [3]); // Add new point to the empty trace
+      }, [3]);
    }
 });
